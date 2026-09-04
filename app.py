@@ -7,9 +7,9 @@ from elevenlabs.client import ElevenLabs
 # Load environment variables
 load_dotenv()
 
-# Initialize Gemini Client and ElevenLabs Client
+# Initialize Gemini Client and ElevenLabs Client (Securely using environment variables/secrets)
 client = genai.Client()
-eleven_client = ElevenLabs(api_key=os.getenv("sk_1c85f9c8b6cb31ca2d209be94b1c7521d2f2ecc62ba41eed"))
+eleven_client = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
 
 # App Styling & Layout
 st.set_page_config(
@@ -80,15 +80,16 @@ if "match_result" in st.session_state:
                     f"Here is the plan: {st.session_state['match_result']}"
                 )
 
-                # Generate audio stream using ElevenLabs API
-                audio_stream = eleven_client.generate(
+                # Generate audio stream using the correct ElevenLabs v1+ SDK syntax
+                audio_stream = eleven_client.text_to_speech.convert(
                     text=tts_script,
-                    voice="Rachel",  # Default high-quality professional voice
-                    model="eleven_multilingual_v2",
+                    voice_id="21m00Tcm4TlvDq8ikWAM",  # Rachel voice ID
+                    model_id="eleven_multilingual_v2",
+                    output_format="mp3_44100_128",
                 )
                 
                 # Convert generator/stream to bytes for Streamlit audio component
-                audio_bytes = b"".join(audio_stream)
+                audio_bytes = b"".join(list(audio_stream))
                 
                 # Play audio in app
                 st.audio(audio_bytes, format="audio/mp3")
