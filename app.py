@@ -80,10 +80,10 @@ if "match_result" in st.session_state:
                     f"Here is the plan: {st.session_state['match_result']}"
                 )
 
-                # Generate audio stream using the correct ElevenLabs v1+ SDK syntax
+                # Generate audio stream using a free-tier compatible voice ID (Bella)
                 audio_stream = eleven_client.text_to_speech.convert(
                     text=tts_script,
-                    voice_id="21m00Tcm4TlvDq8ikWAM",  # Rachel voice ID
+                    voice_id="EXAVITQu4vr4xnSDxMaL",  # Free-tier compatible default voice ID
                     model_id="eleven_multilingual_v2",
                     output_format="mp3_44100_128",
                 )
