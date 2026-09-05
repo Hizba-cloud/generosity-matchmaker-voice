@@ -52,15 +52,12 @@ st.set_page_config(
     layout="centered"
 )
 
-# Custom CSS for Modern Minimalist Indigo & Slate Light Theme
+# Custom CSS for Modern Minimalist Indigo & Slate Light Theme with Pice/Cards
 st.markdown("""
     <style>
-    /* Global Background */
     .stApp {
         background-color: #F8FAFC;
     }
-    
-    /* Header Typography */
     .main-header {
         font-size: 2.5rem;
         color: #0F172A;
@@ -72,26 +69,22 @@ st.markdown("""
         font-size: 1.05rem;
         color: #475569;
         font-weight: 500;
-        margin-bottom: 25px;
+        margin-bottom: 20px;
     }
-
-    /* Custom Gradient Buttons */
     .stButton button {
         background: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%);
         color: white;
         border-radius: 12px;
-        padding: 0.6rem 1.2rem;
+        padding: 0.5rem 1rem;
         font-weight: 600;
         border: none;
-        box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
+        box-shadow: 0 4px 14px rgba(79, 70, 229, 0.2);
         transition: all 0.3s ease;
     }
     .stButton button:hover {
         transform: translateY(-1px);
-        box-shadow: 0 6px 20px rgba(79, 70, 229, 0.35);
+        box-shadow: 0 6px 20px rgba(79, 70, 229, 0.3);
     }
-
-    /* Text Area Styling */
     div[data-baseweb="textarea"] textarea {
         background-color: #FFFFFF;
         border-radius: 12px;
@@ -99,12 +92,6 @@ st.markdown("""
         padding: 14px;
         color: #1E293B;
     }
-    div[data-baseweb="textarea"] textarea:focus {
-        border-color: #4F46E5;
-        box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
-    }
-
-    /* Info Callouts and Containers */
     .stAlert {
         border-radius: 12px;
         border: 1px solid #E2E8F0;
@@ -117,23 +104,52 @@ st.markdown("""
 st.markdown('<p class="main-header">🌟 Generosity Matchmaker</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-title">Powered by Google Gemini AI, ElevenLabs, Solana & Snowflake</p>', unsafe_allow_html=True)
 
+# Banner Image to give it a rich visual look
+st.image(
+    "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=1200&q=80",
+    use_container_width=True,
+    caption="Connecting generous hearts with community causes worldwide"
+)
+
 with st.container():
-    st.info("💡 **How it works:** Want to give back, donate items, or share your time, but aren't sure where to start? Tell us what you have or want to do, and our AI matchmaker will build a customized action plan for you!")
+    st.info("💡 **How it works:** Choose a quick-select cause below or type your own custom contribution. Our AI matchmaker will instantly build your tailored action plan!")
+
+# Initialize session state for text input value if not present
+if "input_text" not in st.session_state:
+    st.session_state["input_text"] = ""
+
+# Quick-Select Cause Buttons (Pills/Chips style)
+st.markdown("##### 🚀 Quick-Select Popular Causes:")
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    if st.button("🧥 Winter Jackets", use_container_width=True):
+        st.session_state["input_text"] = "I have 5 old winter jackets and blankets to donate for the cold season."
+with col2:
+    if st.button("📚 Story Books", use_container_width=True):
+        st.session_state["input_text"] = "I have a collection of children's storybooks and educational notebooks to share."
+with col3:
+    if st.button("🍲 Food Drive", use_container_width=True):
+        st.session_state["input_text"] = "I want to donate non-perishable food supplies and dry rations for a local food drive."
+with col4:
+    if st.button("💻 Tutoring Time", use_container_width=True):
+        st.session_state["input_text"] = "I want to volunteer 2 hours a week teaching basic coding and math to kids."
 
 # User Input Form
 with st.form("match_form"):
-    st.markdown("### 📝 Tell Us What You Want to Share")
+    st.markdown("### 📝 Contribution Details")
     user_input = st.text_area(
-        "Contribution Details",
-        placeholder="e.g., I have 5 old winter jackets and some children's books, or I want to volunteer 2 hours teaching kids.",
-        label_visibility="collapsed"
+        "What would you like to donate or contribute?",
+        value=st.session_state["input_text"],
+        placeholder="e.g., I have medical supplies or want to volunteer...",
+        height=100
     )
     submit_button = st.form_submit_button("Find Match & Generate Guide ✨", use_container_width=True)
 
 # Handle Submission & API Call
 if submit_button:
     if not user_input.strip():
-        st.warning("⚠️ Please enter what you'd like to contribute first!")
+        st.warning("⚠️ Please enter or select what you'd like to contribute first!")
     else:
         with st.spinner("✨ Consulting Gemini AI to craft your custom impact roadmap..."):
             try:
