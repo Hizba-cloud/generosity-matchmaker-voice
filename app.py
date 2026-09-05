@@ -95,7 +95,17 @@ if "match_result" in st.session_state:
                 
                 # Play audio in app
                 st.audio(audio_bytes, format="audio/mp3")
+                st.audio(audio_bytes, format="audio/mp3")
                 st.success("Audio guide ready!")
 
             except Exception as e:
                 st.error(f"ElevenLabs Error: Make sure your ELEVENLABS_API_KEY is valid in your environment or secrets. Details: {e}")
+
+    # Solana Micro-Donation Integration Section
+    st.markdown("---")
+    st.markdown("### 🪙 Support Community Drives via Solana")
+    st.write("Prefer to support the cause with crypto micro-donations? Solana enables lightning-fast, ultra-low-fee transfers ($0.00025 per transaction) so 100% of your contribution reaches the initiative.")
+    
+    # Example wallet field
+    st.code("GenerosityFundSolanaWallet11111111111111", language="text")
+    st.caption("Copy the address above or scan via your Solana wallet (Phantom / Solflare) to send SOL or USDC micro-donations.")
