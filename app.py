@@ -37,6 +37,7 @@ if submit_button:
     else:
         with st.spinner("Consulting Gemini AI to find the best match..."):
             try:
+                # Upgraded prompt including suggested platforms & search terms
                 prompt = f"""
                 You are an AI assistant for a charity and community generosity platform. 
                 A user wants to give back and has provided this input: "{user_input}"
@@ -44,7 +45,8 @@ if submit_button:
                 Please respond with:
                 1. **Recommended Category of Charity/Cause:** (e.g., Education, Warmth/Clothing Drive, Food Security)
                 2. **How to Prepare Items/Time:** (3 brief bullet points on what the user should do next)
-                3. **Drafted Outreach Message:** (A short, polite message the user can copy-paste to a local shelter, NGO, or community center)
+                3. **Suggested Platforms or Search Terms:** (Provide 2-3 types of verified organizations, platforms, or search queries they can use to find active drives or direct donation links nearby)
+                4. **Drafted Outreach Message:** (A short, polite message the user can copy-paste to a local shelter, NGO, or community center)
                 """
 
                 response = client.models.generate_content(
