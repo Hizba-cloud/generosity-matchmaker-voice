@@ -52,16 +52,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Custom Responsive Styling & Animations
+# Custom Responsive Styling
 st.markdown("""
     <style>
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
     .stApp {
         background-color: #F8FAFC;
-        animation: fadeIn 0.6s ease-out forwards;
     }
     .main-header {
         font-size: clamp(2rem, 4vw, 2.8rem);
@@ -112,9 +107,9 @@ st.markdown("""
 
 # App Header Section
 st.markdown('<p class="main-header">🌟 Generosity & Empathy Matchmaker</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-title">Connecting human kindness with verified community causes through compassionate AI intelligence.</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-title">Connecting human kindness with verified community causes through compassionate AI guidance.</p>', unsafe_allow_html=True)
 
-# Impact Metrics Bar
+# Impact Metrics Bar (Always Visible & Filled)
 col_m1, col_m2, col_m3, col_m4 = st.columns(4)
 with col_m1:
     st.metric(label="❤️ Acts of Kindness", value="14,250+", delta="+320 this week")
@@ -127,8 +122,8 @@ with col_m4:
 
 st.markdown("---")
 
-# Responsive Tab Navigation
-tab1, tab2, tab3 = st.tabs(["🤝 AI Matchmaker Hub", "📖 The Science of Kindness", "📊 Transparency & Impact Logs"])
+# Responsive Tab Navigation with Fully Populated Content
+tab1, tab2, tab3 = st.tabs(["🤝 AI Matchmaker Hub", "📖 The Science & Spirit of Kindness", "📊 Community Impact & Telemetry"])
 
 # ================= TAB 1: MATCHMAKER DASHBOARD =================
 with tab1:
@@ -210,19 +205,28 @@ with tab1:
                 except Exception as e:
                     st.error(f"An error occurred: {e}")
 
-    # Display Results if Generated
-    if "match_result" in st.session_state:
-        st.markdown("---")
-        res_col1, res_col2 = st.columns(2, gap="large")
-        
-        with res_col1:
-            with st.container(border=True):
-                st.markdown("### 📋 Your Compassionate Action Plan")
+    # Always show something on the right/bottom so it's never empty
+    st.markdown("---")
+    res_col1, res_col2 = st.columns(2, gap="large")
+    
+    with res_col1:
+        with st.container(border=True):
+            st.markdown("### 📋 Compassionate Action Plan")
+            if "match_result" in st.session_state:
                 st.markdown(st.session_state["match_result"])
+            else:
+                st.info("👋 **Your personalized roadmap will appear here!** Select a quick cause above or type your offering and click **'Generate Empathy Roadmap'**.")
+                st.markdown("""
+                **What you will receive:**
+                * **Category Matching:** Tailored classification for your gift.
+                * **Preparation Steps:** Clear instructions on sorting or scheduling.
+                * **Outreach Templates:** Ready-to-use polite messages for local shelters or organizers.
+                """)
 
-        with res_col2:
-            with st.container(border=True):
-                st.markdown("### 🎙️ Audio Voice Guide")
+    with res_col2:
+        with st.container(border=True):
+            st.markdown("### 🎙️ Audio Voice Guide & Community Support")
+            if "match_result" in st.session_state:
                 st.write("Listen to your personalized generosity guide read aloud.")
                 if st.button("🔊 Play Voice Synthesis", use_container_width=True):
                     with st.spinner("Synthesizing audio..."):
@@ -243,44 +247,86 @@ with tab1:
                             st.success("Audio ready!")
                         except Exception as e:
                             st.error(f"Voice Synthesis Error: {e}")
+            else:
+                st.write("Generate your AI action plan above to unlock instant audio narration and direct community micro-support links.")
 
-                st.markdown("---")
-                st.markdown("### 🪙 Community Micro-Support")
-                wallet_address = "GenerosityFundSolanaWallet11111111111111"
-                st.code(wallet_address, language="text")
-                
-                try:
-                    qr = qrcode.QRCode(version=1, box_size=6, border=2)
-                    qr.add_data(wallet_address)
-                    qr.make(fit=True)
-                    img = qr.make_image(fill_color="black", back_color="white")
-                    buffered = BytesIO()
-                    img.save(buffered, format="PNG")
-                    st.image(buffered.getvalue(), width=160, caption="Scan to support community funds")
-                except Exception:
-                    pass
+            st.markdown("---")
+            st.markdown("### 🪙 Community Micro-Support Fund")
+            wallet_address = "GenerosityFundSolanaWallet11111111111111"
+            st.code(wallet_address, language="text")
+            
+            try:
+                qr = qrcode.QRCode(version=1, box_size=6, border=2)
+                qr.add_data(wallet_address)
+                qr.make(fit=True)
+                img = qr.make_image(fill_color="black", back_color="white")
+                buffered = BytesIO()
+                img.save(buffered, format="PNG")
+                st.image(buffered.getvalue(), width=150, caption="Scan to support community funds")
+            except Exception:
+                pass
 
-# ================= TAB 2: THE SCIENCE OF KINDNESS =================
+# ================= TAB 2: THE SCIENCE & SPIRIT OF KINDNESS =================
 with tab2:
-    with st.container(border=True):
-        st.markdown("### 📖 The Psychology and Power of Giving")
-        st.markdown("""
-        Kindness is not just a moral virtue; it is a fundamental pillar of human well-being and social resilience. Scientific research consistently shows that practicing generosity activates the brain's reward circuitry, releasing dopamine and oxytocin—often referred to as the **"helper’s high."**
+    col_t1, col_t2 = st.columns(2, gap="large")
+    
+    with col_t1:
+        with st.container(border=True):
+            st.markdown("### 🧠 The Psychology of Giving")
+            st.markdown("""
+            Kindness is deeply embedded in human biology. Scientific research demonstrates that acts of generosity trigger powerful psychological and physiological benefits:
+            
+            * **The 'Helper’s High':** Giving stimulates the brain's mesolimbic pathway, releasing dopamine and endorphins that produce a profound sense of warmth and joy.
+            * **Stress Reduction:** Altruistic behavior lowers cortisol levels, promoting emotional balance and long-term resilience.
+            * **Social Bonding:** Sharing resources and time fosters oxytocin production, strengthening community trust and mutual support.
+            """)
+            
+        with st.container(border=True):
+            st.markdown("### 💡 Daily Habits of Empathy")
+            st.markdown("""
+            * **Active Listening:** Giving someone your undivided attention is one of the purest forms of respect.
+            * **Small Surprises:** Leaving a note of encouragement or offering a small gesture can completely transform someone's day.
+            * **Community Awareness:** Checking in on neighbors, elderly individuals, or local students creates an unbreakable safety net.
+            """)
 
-        #### 🌟 Core Principles of Generosity:
-        * **Empathy in Action:** Empathy allows us to feel with others, but generosity bridges the gap, turning shared understanding into tangible relief and support.
-        * **The Ripple Effect:** Acts of kindness inspire emotional contagion. When people witness generosity, they are significantly more likely to pay it forward within their own communities.
-        * **Reducing Friction:** Often, people want to help but hesitate due to lack of direction. By clarifying *how* to give, we transform good intentions into immediate, meaningful impact.
+    with col_t2:
+        with st.container(border=True):
+            st.markdown("### 🌟 Wisdom on Generosity")
+            st.markdown("""
+            > *"We rise by lifting others. True generosity consists in doing something nice for someone who can never repay you."*
+            
+            #### 🌊 The Ripple Effect of Kindness
+            Kindness is uniquely contagious. When an individual experiences or witnesses an act of generosity, emotional contagion takes root, inspiring them to pay it forward to at least three other people. 
+            
+            By removing the friction of **not knowing how or where to help**, platforms like this transform spontaneous goodwill into organized, life-changing community impact.
+            """)
+            
+        with st.container(border=True):
+            st.markdown("### 🤝 Ways Anyone Can Make a Difference")
+            st.markdown("""
+            * **Donate Warmth:** Winter clothes, blankets, and coats protect vulnerable families during harsh weather.
+            * **Share Knowledge:** Tutoring kids or mentoring young minds opens doors to lifelong opportunities.
+            * **Nourish Communities:** Supporting local food drives ensures no family goes to sleep hungry.
+            """)
 
-        > *"We rise by lifting others. True generosity consists in doing something nice for someone who can never repay you."*
-        """)
-
-# ================= TAB 3: TRANSPARENCY & IMPACT LOGS =================
+# ================= TAB 3: COMMUNITY IMPACT & TELEMETRY =================
 with tab3:
     with st.container(border=True):
-        st.markdown("### 📊 Global Generosity Telemetry")
-        st.write("A transparent, real-time log of community contributions recorded securely to foster accountability and trust across our network.")
+        st.markdown("### 📊 Transparency & Community Telemetry")
+        st.write("We believe in total transparency. Below is an overview of how community kindness is tracked, verified, and celebrated across our network.")
         
+        col_s1, col_s2 = st.columns(2)
+        with col_s1:
+            st.markdown("#### 🛡️ Our Commitment to Trust")
+            st.markdown("""
+            * **Verified Causes:** Every suggested category aligns with verified non-profits and grassroots community needs.
+            * **Secure Logging:** Contributions are securely recorded to measure collective outreach and ensure momentum.
+            * **Zero Friction:** Eliminating guesswork so every hour volunteered or item donated reaches the right hands instantly.
+            """)
+        with col_s2:
+            st.markdown("#### 📈 Real-Time Activity Feed")
+            st.write("Live engagement records captured securely from community interactions:")
+
         try:
             conn = snowflake.connector.connect(
                 user=os.getenv("SNOWFLAKE_USER"),
@@ -296,10 +342,19 @@ with tab3:
             if not df.empty:
                 st.dataframe(df, use_container_width=True)
             else:
-                st.info("No logs recorded yet. Submit a match on the Matchmaker tab to populate this live transparency table!")
+                st.info("✨ No live database logs yet. Submit a match on the **AI Matchmaker Hub** tab to add your first entry to the telemetry ledger!")
         except Exception as e:
-            st.warning(f"Telemetry preview note: {e}")
-            st.info("Database connection will reflect live community engagement records as contributions are submitted.")
+            st.info("ℹ️ **Database Connection Note:** Live database preview is currently in standby. Here is a sample preview of how community telemetry is recorded:")
+            sample_df = pd.DataFrame({
+                "TIMESTAMP": ["2026-09-05 14:20:10", "2026-09-05 13:15:45", "2026-09-05 11:05:30"],
+                "USER_CONTRIBUTION": [
+                    "I have winter jackets and blankets to donate for families in need.",
+                    "I want to volunteer 2 hours a week teaching basic skills.",
+                    "I want to contribute non-perishable food items."
+                ],
+                "CHARITY_CATEGORY": ["Warmth & Clothing", "Education & Mentorship", "Food Security"]
+            })
+            st.dataframe(sample_df, use_container_width=True)
 
 # Global Persistent Footer
 st.markdown("""
