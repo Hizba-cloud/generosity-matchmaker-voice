@@ -110,16 +110,16 @@ with tab1:
             st.markdown("**Quick-Select Ways to Help:**")
             q1, q2, q3, q4 = st.columns(4)
             with q1:
-                if st.button("🧥 Jackets", use_container_width=True):
+                if st.button("🧥 Jackets", width="stretch"):
                     st.session_state["input_text"] = "I have winter jackets and blankets to donate for families in need."
             with q2:
-                if st.button("📚 Books", use_container_width=True):
+                if st.button("📚 Books", width="stretch"):
                     st.session_state["input_text"] = "I have educational books and storybooks to share with children."
             with q3:
-                if st.button("🍲 Food", use_container_width=True):
+                if st.button("🍲 Food", width="stretch"):
                     st.session_state["input_text"] = "I want to contribute non-perishable food items for a community food drive."
             with q4:
-                if st.button("💻 Tutoring", use_container_width=True):
+                if st.button("💻 Tutoring", width="stretch"):
                     st.session_state["input_text"] = "I want to volunteer my time teaching basic skills and mentorship."
 
             with st.form("match_form"):
@@ -129,14 +129,14 @@ with tab1:
                     placeholder="e.g., I want to volunteer 2 hours a week or donate warm clothes...",
                     height=130
                 )
-                submit_button = st.form_submit_button("Generate Empathy Roadmap ✨", use_container_width=True)
+                submit_button = st.form_submit_button("Generate Empathy Roadmap ✨", width="stretch")
 
     with col_side:
         with st.container(border=True):
             st.markdown("### 🌍 Cultivating Everyday Empathy")
             st.image(
                 "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=600&q=80",
-                use_container_width=True,
+                width="stretch",
                 caption="Every act of kindness ripples further than we know."
             )
             st.markdown("""
@@ -189,7 +189,7 @@ with tab1:
             st.markdown("### 🎙️ Audio Voice Guide & Community Support")
             if "match_result" in st.session_state:
                 st.write("Listen to your personalized generosity guide read aloud.")
-                if st.button("🔊 Play Voice Synthesis", use_container_width=True):
+                if st.button("🔊 Play Voice Synthesis", width="stretch"):
                     if not eleven_client:
                         st.warning("ElevenLabs API Key not configured. Skipping audio generation.")
                     else:
@@ -258,7 +258,7 @@ with tab3:
                 )
                 df = pd.read_sql("SELECT * FROM generosity_logs ORDER BY timestamp DESC LIMIT 50", conn)
                 conn.close()
-                st.dataframe(df, use_container_width=True)
+                st.dataframe(df, width="stretch")
             else:
                 raise Exception("No Snowflake credentials")
         except Exception:
@@ -268,7 +268,7 @@ with tab3:
                 "USER_CONTRIBUTION": ["I have winter jackets to donate.", "I want to volunteer."],
                 "CHARITY_CATEGORY": ["Warmth & Clothing", "Education & Mentorship"]
             })
-            st.dataframe(sample_df, use_container_width=True)
+            st.dataframe(sample_df, width="stretch")
 
 st.markdown("""
     <div class="footer">
