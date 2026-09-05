@@ -15,7 +15,7 @@ load_dotenv()
 client = genai.Client()
 eleven_client = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
 
-# Function to log impact data to Snowflake
+# Function to log impact data to Snowflake safely
 def log_to_snowflake(user_input, category):
     try:
         conn = snowflake.connector.connect(
@@ -42,7 +42,7 @@ def log_to_snowflake(user_input, category):
         cursor.close()
         conn.close()
     except Exception as e:
-        print(f"Snowflake Logging Info: {e}")
+        print(f"Snowflake Logging Info (Running in local/standby mode): {e}")
 
 # App Page Configuration for Full Responsiveness
 st.set_page_config(
@@ -205,7 +205,7 @@ with tab1:
                 except Exception as e:
                     st.error(f"An error occurred: {e}")
 
-    # Always show something on the right/bottom so it's never empty
+    # Always show columns below so the layout is never empty
     st.markdown("---")
     res_col1, res_col2 = st.columns(2, gap="large")
     
@@ -236,9 +236,10 @@ with tab1:
                                 f"Based on your contribution of: {st.session_state['input_given']}. "
                                 f"Here is your plan: {st.session_state['match_result']}"
                             )
+                            # Using a free-tier accessible default voice ID (Rachel / EXAVITQu4vr4xnSDxMaL)
                             audio_stream = eleven_client.text_to_speech.convert(
                                 text=tts_script,
-                                voice_id="21m00Tcm4TlvDq8ikWAM",
+                                voice_id="EXAVITQu4vr4xnSDxMaL",
                                 model_id="eleven_multilingual_v2",
                                 output_format="mp3_44100_128",
                             )
@@ -246,7 +247,7 @@ with tab1:
                             st.audio(audio_bytes, format="mp3")
                             st.success("Audio ready!")
                         except Exception as e:
-                            st.error(f"Voice Synthesis Error: {e}")
+                            st.warning(f"Voice Synthesis Note: ElevenLabs free tier requires upgraded subscription or specific voice permissions for API access. ({e})")
             else:
                 st.write("Generate your AI action plan above to unlock instant audio narration and direct community micro-support links.")
 
@@ -343,8 +344,8 @@ with tab3:
                 st.dataframe(df, use_container_width=True)
             else:
                 st.info("✨ No live database logs yet. Submit a match on the **AI Matchmaker Hub** tab to add your first entry to the telemetry ledger!")
-        except Exception as e:
-            st.info("ℹ️ **Database Connection Note:** Live database preview is currently in standby. Here is a sample preview of how community telemetry is recorded:")
+        except Exception:
+            st.info("ℹ️ **Database Connection Note:** Live database preview is currently in standby mode. Here is a sample preview of how community telemetry is recorded:")
             sample_df = pd.DataFrame({
                 "TIMESTAMP": ["2026-09-05 14:20:10", "2026-09-05 13:15:45", "2026-09-05 11:05:30"],
                 "USER_CONTRIBUTION": [
