@@ -4,7 +4,7 @@
 
 ## 🚀 About The Project
 
-The **Generosity Matchmaker** is a lightweight, interactive web application designed to bridge the gap between people wanting to give back (donating items, books, clothes, or volunteer time) and local charities or community organizations. Instead of wondering how or where to contribute, users input what they have or want to do, and the app instantly generates a custom action plan—complete with verified platform search terms and an audio voice narration guide.
+The **Generosity Matchmaker** is a lightweight, interactive web application designed to bridge the gap between people wanting to give back (donating items, books, clothes, or volunteer time) and local charities or community organizations. Instead of wondering how or where to contribute, users input what they have or want to do, and the app instantly generates a custom action plan—complete with verified platform search terms, an audio voice narration guide, and lightning-fast Solana micro-donations.
 
 ---
 
@@ -14,6 +14,7 @@ The **Generosity Matchmaker** is a lightweight, interactive web application desi
 - **Streamlit** (for the frontend user interface)
 - **Google GenAI SDK (`gemini-2.5-flash`)** (for fast, structured natural language generation)
 - **ElevenLabs API** (for accessible, human-like voice synthesis and audio guides)
+- **Solana & Python-QRcode** (for instant, low-fee web3 micro-donations via scannable QR codes)
 - **Python-Dotenv** (for secure environment configuration)
 
 ---
@@ -28,6 +29,7 @@ The **Generosity Matchmaker** is a lightweight, interactive web application desi
    - **Suggested Platforms or Search Terms** (Verified organizations, platforms, or search queries to find active drives and direct donation links nearby)
    - **Drafted Outreach Message** (A polite, ready-to-copy template for local shelters or NGOs)
 4. **ElevenLabs Narration:** Users can click to listen to their entire action plan read aloud via ElevenLabs text-to-speech for seamless accessibility.
+5. **Solana Micro-Donations:** Users can instantly support community initiatives with low-fee ($0.00025) crypto contributions by scanning the automatically generated Solana QR code with a wallet like Phantom or Solflare.
 
 ---
 
