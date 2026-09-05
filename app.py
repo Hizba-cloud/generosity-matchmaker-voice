@@ -170,7 +170,10 @@ if "match_result" in st.session_state:
                 st.success("Audio guide ready!")
 
             except Exception as e:
-                st.error(f"ElevenLabs Error: {e}")
+                if "402" in str(e) or "paid_plan_required" in str(e):
+                    st.warning("⚠️ **ElevenLabs Free Tier Notice:** ElevenLabs free API accounts restrict the programmatic use of certain library voices. Please upgrade your ElevenLabs plan or use a compatible voice ID to enable audio playback.")
+                else:
+                    st.error(f"ElevenLabs Error: {e}")
 
     # Solana Micro-Donation Integration Section with QR Code Card
     st.markdown("---")
