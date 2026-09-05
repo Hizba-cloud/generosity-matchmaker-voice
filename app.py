@@ -3,11 +3,13 @@ import streamlit as st
 from google import genai
 from dotenv import load_dotenv
 from elevenlabs.client import ElevenLabs
+import qrcode
+from io import BytesIO
 
 # Load environment variables
 load_dotenv()
 
-# Initialize Gemini Client and ElevenLabs Client (Securely using environment variables/secrets)
+# Initialize Gemini Client and ElevenLabs Client securely
 client = genai.Client()
 eleven_client = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
 
@@ -54,7 +56,7 @@ if submit_button:
                     contents=prompt,
                 )
                 
-                # Save response text in session state so it persists across audio rendering
+                # Save response text in session state
                 st.session_state["match_result"] = response.text
                 st.session_state["input_given"] = user_input
 
@@ -75,37 +77,50 @@ if "match_result" in st.session_state:
     if st.button("🔊 Generate & Play Voice Guide"):
         with st.spinner("Synthesizing voice audio with ElevenLabs..."):
             try:
-                # Prepare compact script for text-to-speech
                 tts_script = (
                     "Here is your personalized generosity match guide. "
                     f"Based on your contribution of: {st.session_state['input_given']}. "
                     f"Here is the plan: {st.session_state['match_result']}"
                 )
 
-                # Generate audio stream using a free-tier compatible voice ID (Bella)
+                # Generate audio stream using ElevenLabs text_to_speech convert API
                 audio_stream = eleven_client.text_to_speech.convert(
                     text=tts_script,
-                    voice_id="EXAVITQu4vr4xnSDxMaL",  # Free-tier compatible default voice ID
+                    voice_id="21m00Tcm4TlvDq8ikWAM",
                     model_id="eleven_multilingual_v2",
                     output_format="mp3_44100_128",
                 )
                 
-                # Convert generator/stream to bytes for Streamlit audio component
+                # Consume generator into bytes
                 audio_bytes = b"".join(list(audio_stream))
                 
-                # Play audio in app
-                st.audio(audio_bytes, format="audio/mp3")
+                # Play audio in Streamlit
                 st.audio(audio_bytes, format="audio/mp3")
                 st.success("Audio guide ready!")
 
             except Exception as e:
-                st.error(f"ElevenLabs Error: Make sure your ELEVENLABS_API_KEY is valid in your environment or secrets. Details: {e}")
+                st.error(f"ElevenLabs Error: {e}")
 
-    # Solana Micro-Donation Integration Section
+    # Solana Micro-Donation Integration Section with QR Code
     st.markdown("---")
     st.markdown("### 🪙 Support Community Drives via Solana")
-    st.write("Prefer to support the cause with crypto micro-donations? Solana enables lightning-fast, ultra-low-fee transfers ($0.00025 per transaction) so 100% of your contribution reaches the initiative.")
+    st.write("Prefer to support the cause with crypto micro-donations? Solana enables lightning-fast, ultra-low-fee transfers so 100% of your contribution reaches the initiative.")
     
-    # Example wallet field
-    st.code("GenerosityFundSolanaWallet11111111111111", language="text")
-    st.caption("Copy the address above or scan via your Solana wallet (Phantom / Solflare) to send SOL or USDC micro-donations.")
+    wallet_address = "GenerosityFundSolanaWallet11111111111111"
+    st.code(wallet_address, language="text")
+    
+    try:
+        qr = qrcode.QRCode(version=1, box_size=10, border=4)
+        qr.add_data(wallet_address)
+        qr.make(fit=True)
+        
+        img = qr.make_image(fill_color="black", back_color="white")
+        buffered = BytesIO()
+        img.save(buffered, format="PNG")
+        
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            st.image(buffered.getvalue(), caption="Scan with Phantom or Solflare Wallet", width=250)
+            
+    except Exception as e:
+        st.caption("Copy the address above to send SOL or USDC micro-donations via your wallet.")
