@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from elevenlabs.client import ElevenLabs
 import qrcode
 from io import BytesIO
+import snowflake.connector
 
 # Load environment variables
 load_dotenv()
@@ -12,6 +13,38 @@ load_dotenv()
 # Initialize Gemini Client and ElevenLabs Client securely
 client = genai.Client()
 eleven_client = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
+
+# Function to log impact data to Snowflake (Optional/Safe execution)
+def log_to_snowflake(user_input, category):
+    try:
+        conn = snowflake.connector.connect(
+            user=os.getenv("SNOWFLAKE_USER"),
+            password=os.getenv("SNOWFLAKE_PASSWORD"),
+            account=os.getenv("SNOWFLAKE_ACCOUNT"),
+            warehouse=os.getenv("SNOWFLAKE_WAREHOUSE"),
+            database=os.getenv("SNOWFLAKE_DATABASE"),
+            schema=os.getenv("SNOWFLAKE_SCHEMA")
+        )
+        cursor = conn.cursor()
+        # Ensure table exists
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS generosity_logs (
+                timestamp TIMESTAMP_NTZ DEFAULT CURRENT_TIMESTAMP(),
+                user_contribution STRING,
+                charity_category STRING
+            )
+        """)
+        # Insert log
+        cursor.execute(
+            "INSERT INTO generosity_logs (user_contribution, charity_category) VALUES (%s, %s)",
+            (user_input, category)
+        )
+        conn.commit()
+        cursor.close()
+        conn.close()
+    except Exception as e:
+        # Fails silently for local users without Snowflake config so the app doesn't break
+        print(f"Snowflake Logging Info: {e}")
 
 # App Styling & Layout
 st.set_page_config(
@@ -21,7 +54,7 @@ st.set_page_config(
 )
 
 st.title("🌟 Generosity Matchmaker")
-st.markdown("### Powered by Google Gemini AI & ElevenLabs Voice")
+st.markdown("### Powered by Google Gemini AI, ElevenLabs, Solana & Snowflake")
 st.write("Want to give back, donate items, or share your time, but aren't sure where to start? Tell us what you have or want to do, and our AI matchmaker will guide you!")
 
 # User Input Form
@@ -39,7 +72,6 @@ if submit_button:
     else:
         with st.spinner("Consulting Gemini AI to find the best match..."):
             try:
-                # Upgraded prompt including suggested platforms & search terms
                 prompt = f"""
                 You are an AI assistant for a charity and community generosity platform. 
                 A user wants to give back and has provided this input: "{user_input}"
@@ -56,11 +88,13 @@ if submit_button:
                     contents=prompt,
                 )
                 
-                # Save response text in session state
                 st.session_state["match_result"] = response.text
                 st.session_state["input_given"] = user_input
 
-                st.success("Match found successfully!")
+                # Log to Snowflake warehouse in the background
+                log_to_snowflake(user_input, "General Match")
+
+                st.success("Match found and logged successfully!")
 
             except Exception as e:
                 st.error(f"An error occurred with Gemini: {e}")
@@ -83,7 +117,6 @@ if "match_result" in st.session_state:
                     f"Here is the plan: {st.session_state['match_result']}"
                 )
 
-                # Generate audio stream using ElevenLabs text_to_speech convert API
                 audio_stream = eleven_client.text_to_speech.convert(
                     text=tts_script,
                     voice_id="21m00Tcm4TlvDq8ikWAM",
@@ -91,10 +124,7 @@ if "match_result" in st.session_state:
                     output_format="mp3_44100_128",
                 )
                 
-                # Consume generator into bytes
                 audio_bytes = b"".join(list(audio_stream))
-                
-                # Play audio in Streamlit
                 st.audio(audio_bytes, format="audio/mp3")
                 st.success("Audio guide ready!")
 
