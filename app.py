@@ -44,33 +44,34 @@ def log_to_snowflake(user_input, category):
     except Exception as e:
         print(f"Snowflake Logging Info: {e}")
 
-# App Page Configuration
+# App Page Configuration for Full Responsiveness
 st.set_page_config(
     page_title="Generosity & Empathy Platform", 
     page_icon="🌟", 
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
 
-# Custom Styling with Smooth Animations & Motion Effects
+# Custom Responsive Styling & Animations
 st.markdown("""
     <style>
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(12px); }
+        from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
     }
     .stApp {
         background-color: #F8FAFC;
-        animation: fadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        animation: fadeIn 0.6s ease-out forwards;
     }
     .main-header {
-        font-size: 2.6rem;
+        font-size: clamp(2rem, 4vw, 2.8rem);
         color: #0F172A;
         font-weight: 800;
         letter-spacing: -0.03em;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
     }
     .sub-title {
-        font-size: 1.05rem;
+        font-size: clamp(0.95rem, 2vw, 1.1rem);
         color: #475569;
         font-weight: 500;
         margin-bottom: 25px;
@@ -82,12 +83,13 @@ st.markdown("""
         padding: 0.6rem 1.2rem;
         font-weight: 600;
         border: none;
+        width: 100%;
         box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s ease;
     }
     .stButton button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 22px rgba(79, 70, 229, 0.4);
+        box-shadow: 0 6px 20px rgba(79, 70, 229, 0.35);
     }
     div[data-baseweb="textarea"] textarea {
         background-color: #FFFFFF;
@@ -96,17 +98,12 @@ st.markdown("""
         padding: 16px;
         color: #1E293B;
         font-size: 1rem;
-        transition: border-color 0.2s ease;
-    }
-    div[data-baseweb="textarea"] textarea:focus {
-        border-color: #4F46E5;
-        box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
     }
     .footer {
         text-align: center;
         color: #94A3B8;
         font-size: 0.9rem;
-        margin-top: 60px;
+        margin-top: 50px;
         padding: 25px;
         border-top: 1px solid #E2E8F0;
     }
@@ -115,23 +112,23 @@ st.markdown("""
 
 # App Header Section
 st.markdown('<p class="main-header">🌟 Generosity & Empathy Matchmaker</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-title">Bridging human kindness with verified community causes through Gemini AI, ElevenLabs voice, Solana blockchain, and Snowflake telemetry.</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-title">Connecting human kindness with verified community causes through compassionate AI intelligence.</p>', unsafe_allow_html=True)
 
-# Meaningful Impact Metrics Bar
+# Impact Metrics Bar
 col_m1, col_m2, col_m3, col_m4 = st.columns(4)
 with col_m1:
-    st.metric(label="❤️ Lives Touched", value="14,250+", delta="+320 this week")
+    st.metric(label="❤️ Acts of Kindness", value="14,250+", delta="+320 this week")
 with col_m2:
-    st.metric(label="🤝 Active Causes", value="48 Verified", delta="12 Local Drives")
+    st.metric(label="🤝 Local Causes", value="48 Supported", delta="Active Drives")
 with col_m3:
-    st.metric(label="🎙️ AI Guides Generated", value="5,890+", delta="Instant Audio")
+    st.metric(label="🎙️ Empathy Voice Guides", value="5,890+", delta="Audio Enabled")
 with col_m4:
-    st.metric(label="🌍 Global Contributors", value="2,410+", delta="Growing Fast")
+    st.metric(label="🌍 Global Givers", value="2,410+", delta="Growing Community")
 
 st.markdown("---")
 
-# Modern Tab Navigation
-tab1, tab2, tab3 = st.tabs(["🤝 AI Matchmaker Hub", "📊 Impact Telemetry Logs", "ℹ️ Mission & Architecture"])
+# Responsive Tab Navigation
+tab1, tab2, tab3 = st.tabs(["🤝 AI Matchmaker Hub", "📖 The Science of Kindness", "📊 Transparency & Impact Logs"])
 
 # ================= TAB 1: MATCHMAKER DASHBOARD =================
 with tab1:
@@ -139,66 +136,66 @@ with tab1:
 
     with col_main:
         with st.container(border=True):
-            st.markdown("### 📝 Share Your Contribution")
-            st.info("💡 **How it works:** Choose a quick-select cause below or type your custom offering to build an instant, AI-verified action roadmap.")
+            st.markdown("### 📝 Share Your Offering of Kindness")
+            st.info("💡 **How it works:** Select a quick-action cause below or write your own custom gift of time, items, or care to receive an instant action roadmap.")
 
             if "input_text" not in st.session_state:
                 st.session_state["input_text"] = ""
 
-            st.markdown("**Quick-Select Popular Causes:**")
+            st.markdown("**Quick-Select Ways to Help:**")
             q1, q2, q3, q4 = st.columns(4)
             with q1:
                 if st.button("🧥 Jackets", use_container_width=True):
-                    st.session_state["input_text"] = "I have 5 old winter jackets and blankets to donate for the cold season."
+                    st.session_state["input_text"] = "I have winter jackets and blankets to donate for families in need."
             with q2:
                 if st.button("📚 Books", use_container_width=True):
-                    st.session_state["input_text"] = "I have a collection of children's storybooks and notebooks to share."
+                    st.session_state["input_text"] = "I have educational books and storybooks to share with children."
             with q3:
                 if st.button("🍲 Food", use_container_width=True):
-                    st.session_state["input_text"] = "I want to donate non-perishable food supplies and dry rations for a local food drive."
+                    st.session_state["input_text"] = "I want to contribute non-perishable food items for a community food drive."
             with q4:
                 if st.button("💻 Tutoring", use_container_width=True):
-                    st.session_state["input_text"] = "I want to volunteer 2 hours a week teaching basic coding and math to kids."
+                    st.session_state["input_text"] = "I want to volunteer my time teaching basic skills and mentorship."
 
             with st.form("match_form"):
                 user_input = st.text_area(
-                    "What would you like to donate or contribute?",
+                    "What would you like to contribute today?",
                     value=st.session_state["input_text"],
-                    placeholder="e.g., I want to volunteer time or donate items...",
+                    placeholder="e.g., I want to volunteer 2 hours a week or donate warm clothes...",
                     height=130
                 )
-                submit_button = st.form_submit_button("Generate AI Impact Roadmap ✨", use_container_width=True)
+                submit_button = st.form_submit_button("Generate Empathy Roadmap ✨", use_container_width=True)
 
     with col_side:
         with st.container(border=True):
-            st.markdown("### 🌍 Cultivating Global Empathy")
+            st.markdown("### 🌍 Cultivating Everyday Empathy")
             st.image(
                 "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=600&q=80",
                 use_container_width=True,
-                caption="Empowering community-driven impact through empathy."
+                caption="Every act of kindness ripples further than we know."
             )
             st.markdown("""
-            * **✨ Tailored Intelligence:** Powered by Google Gemini.
-            * **🎙️ Fully Accessible:** Real-time speech synthesis via ElevenLabs.
-            * **🪙 Decentralized Routing:** Tracked securely via Snowflake & Solana.
+            * **🌱 Intentional Giving:** Structured guidance designed to match your specific resources.
+            * **🎙️ Accessible Voice:** Listen to your guide anywhere via realistic narration.
+            * **🤝 Community First:** Direct alignment with verified local support networks.
             """)
 
-    # Handle Form Submission & AI Call
+    # Handle Submission
     if submit_button:
         if not user_input.strip():
-            st.warning("⚠️ Please enter or select what you'd like to contribute first!")
+            st.warning("⚠️ Please share what you'd like to contribute first!")
         else:
-            with st.spinner("✨ Consulting Gemini AI to map your impact roadmap..."):
+            with st.spinner("✨ Consulting AI to design your compassionate action plan..."):
                 try:
                     prompt = f"""
-                    You are an empathetic AI assistant for a global charity and community generosity platform. 
-                    A user wants to give back and has provided this input: "{user_input}"
+                    You are an empathetic, warm AI assistant for a global kindness and community generosity platform. 
+                    A user wants to give back with this offering: "{user_input}"
                     
-                    Please respond cleanly with:
-                    1. **Recommended Category of Charity/Cause:** (e.g., Education, Warmth/Clothing Drive, Food Security)
-                    2. **How to Prepare Items/Time:** (3 brief bullet points on what the user should do next)
-                    3. **Suggested Platforms or Search Terms:** (Provide 2-3 types of verified organizations, platforms, or search queries they can use to find active drives or direct donation links nearby)
-                    4. **Drafted Outreach Message:** (A short, polite message the user can copy-paste to a local shelter, NGO, or community center)
+                    Please respond warmly and clearly with:
+                    1. **Recommended Category of Need:** (e.g., Warmth & Clothing, Education & Mentorship, Food Security)
+                    2. **How to Prepare Your Contribution:** (3 gentle, practical bullet points on what steps to take)
+                    3. **Suggested Outreach Steps:** (Types of local organizations or search terms to find active community drives nearby)
+                    4. **Drafted Message of Care:** (A kind, polite template message the user can use when reaching out to an organizer or shelter)
                     """
 
                     response = client.models.generate_content(
@@ -211,29 +208,29 @@ with tab1:
                     log_to_snowflake(user_input, "General Match")
 
                 except Exception as e:
-                    st.error(f"An error occurred with Gemini: {e}")
+                    st.error(f"An error occurred: {e}")
 
-    # Display Results Container if Generated
+    # Display Results if Generated
     if "match_result" in st.session_state:
         st.markdown("---")
         res_col1, res_col2 = st.columns(2, gap="large")
         
         with res_col1:
             with st.container(border=True):
-                st.markdown("### 📋 Your Tailored Action Plan")
+                st.markdown("### 📋 Your Compassionate Action Plan")
                 st.markdown(st.session_state["match_result"])
 
         with res_col2:
             with st.container(border=True):
                 st.markdown("### 🎙️ Audio Voice Guide")
-                st.write("Listen to your generated impact guide read aloud by ElevenLabs.")
+                st.write("Listen to your personalized generosity guide read aloud.")
                 if st.button("🔊 Play Voice Synthesis", use_container_width=True):
-                    with st.spinner("Synthesizing audio stream..."):
+                    with st.spinner("Synthesizing audio..."):
                         try:
                             tts_script = (
-                                "Here is your personalized generosity match guide. "
+                                "Here is your personalized generosity guide. "
                                 f"Based on your contribution of: {st.session_state['input_given']}. "
-                                f"Here is the plan: {st.session_state['match_result']}"
+                                f"Here is your plan: {st.session_state['match_result']}"
                             )
                             audio_stream = eleven_client.text_to_speech.convert(
                                 text=tts_script,
@@ -243,12 +240,12 @@ with tab1:
                             )
                             audio_bytes = b"".join(list(audio_stream))
                             st.audio(audio_bytes, format="mp3")
-                            st.success("Audio synthesis ready!")
+                            st.success("Audio ready!")
                         except Exception as e:
-                            st.error(f"ElevenLabs Error: {e}")
+                            st.error(f"Voice Synthesis Error: {e}")
 
                 st.markdown("---")
-                st.markdown("### 🪙 Solana Micro-Donations")
+                st.markdown("### 🪙 Community Micro-Support")
                 wallet_address = "GenerosityFundSolanaWallet11111111111111"
                 st.code(wallet_address, language="text")
                 
@@ -259,15 +256,30 @@ with tab1:
                     img = qr.make_image(fill_color="black", back_color="white")
                     buffered = BytesIO()
                     img.save(buffered, format="PNG")
-                    st.image(buffered.getvalue(), width=160, caption="Scan via Phantom / Solflare")
+                    st.image(buffered.getvalue(), width=160, caption="Scan to support community funds")
                 except Exception:
                     pass
 
-# ================= TAB 2: SNOWFLAKE LOGS =================
+# ================= TAB 2: THE SCIENCE OF KINDNESS =================
 with tab2:
     with st.container(border=True):
-        st.markdown("### 📊 Cloud Telemetry Warehouse")
-        st.write("Real-time engagement telemetry captured safely through Snowflake data warehouses (`generosity_logs`).")
+        st.markdown("### 📖 The Psychology and Power of Giving")
+        st.markdown("""
+        Kindness is not just a moral virtue; it is a fundamental pillar of human well-being and social resilience. Scientific research consistently shows that practicing generosity activates the brain's reward circuitry, releasing dopamine and oxytocin—often referred to as the **"helper’s high."**
+
+        #### 🌟 Core Principles of Generosity:
+        * **Empathy in Action:** Empathy allows us to feel with others, but generosity bridges the gap, turning shared understanding into tangible relief and support.
+        * **The Ripple Effect:** Acts of kindness inspire emotional contagion. When people witness generosity, they are significantly more likely to pay it forward within their own communities.
+        * **Reducing Friction:** Often, people want to help but hesitate due to lack of direction. By clarifying *how* to give, we transform good intentions into immediate, meaningful impact.
+
+        > *"We rise by lifting others. True generosity consists in doing something nice for someone who can never repay you."*
+        """)
+
+# ================= TAB 3: TRANSPARENCY & IMPACT LOGS =================
+with tab3:
+    with st.container(border=True):
+        st.markdown("### 📊 Global Generosity Telemetry")
+        st.write("A transparent, real-time log of community contributions recorded securely to foster accountability and trust across our network.")
         
         try:
             conn = snowflake.connector.connect(
@@ -284,30 +296,14 @@ with tab2:
             if not df.empty:
                 st.dataframe(df, use_container_width=True)
             else:
-                st.info("No logs recorded yet. Submit a match on the Matchmaker tab to populate this telemetry table!")
+                st.info("No logs recorded yet. Submit a match on the Matchmaker tab to populate this live transparency table!")
         except Exception as e:
-            st.warning(f"Could not connect to Snowflake to render the live table in preview: {e}")
-            st.info("You can run this query directly in your Snowflake worksheet:\n`SELECT * FROM generosity_db.public.generosity_logs ORDER BY timestamp DESC;`")
-
-# ================= TAB 3: ABOUT MISSION =================
-with tab3:
-    with st.container(border=True):
-        st.markdown("### 🌟 The Philosophy of Empathy & Generosity")
-        st.markdown("""
-        In a world full of resources and people willing to give back, the biggest barrier is friction—not knowing **where** items are needed, **how** to prepare them, or **who** to contact locally. 
-
-        The **Generosity & Empathy Matchmaker** is designed to eliminate this friction entirely, merging modern AI workflows with decentralized tools to scale human kindness effortlessly.
-
-        #### 🛠️ Technology Stack & Architecture:
-        * **Google Gemini AI (`gemini-2.5-flash`):** Powers intelligent contextual categorization, preparation instructions, and custom outreach message generation.
-        * **ElevenLabs API:** Delivers realistic text-to-speech voice guides for accessibility and ease of use.
-        * **Solana Blockchain:** Facilitates lightning-fast, ultra-low fee cryptocurrency micro-donations with embedded QR code scanning.
-        * **Snowflake Data Warehouse:** Securely captures and logs engagement telemetry data for every interaction in real-time.
-        """)
+            st.warning(f"Telemetry preview note: {e}")
+            st.info("Database connection will reflect live community engagement records as contributions are submitted.")
 
 # Global Persistent Footer
 st.markdown("""
     <div class="footer">
-        🌟 Generosity & Empathy Platform • Powered by Google Gemini AI, ElevenLabs, Solana & Snowflake • Cultivating Global Kindness.
+        🌟 Generosity & Empathy Platform • Powered by Compassionate AI & Community Care • Cultivating Global Kindness.
     </div>
 """, unsafe_allow_html=True)
