@@ -52,23 +52,63 @@ st.set_page_config(
     layout="centered"
 )
 
-# Custom CSS for polished aesthetics
+# Custom CSS for Modern Minimalist Indigo & Slate Light Theme
 st.markdown("""
     <style>
+    /* Global Background */
+    .stApp {
+        background-color: #F8FAFC;
+    }
+    
+    /* Header Typography */
     .main-header {
         font-size: 2.5rem;
-        color: #FF4B4B;
-        font-weight: 700;
+        color: #0F172A;
+        font-weight: 800;
+        letter-spacing: -0.03em;
         margin-bottom: 0px;
     }
     .sub-title {
-        font-size: 1.1rem;
-        color: #6c757d;
+        font-size: 1.05rem;
+        color: #475569;
+        font-weight: 500;
         margin-bottom: 25px;
     }
+
+    /* Custom Gradient Buttons */
     .stButton button {
-        border-radius: 8px;
+        background: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%);
+        color: white;
+        border-radius: 12px;
+        padding: 0.6rem 1.2rem;
         font-weight: 600;
+        border: none;
+        box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
+        transition: all 0.3s ease;
+    }
+    .stButton button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(79, 70, 229, 0.35);
+    }
+
+    /* Text Area Styling */
+    div[data-baseweb="textarea"] textarea {
+        background-color: #FFFFFF;
+        border-radius: 12px;
+        border: 1px solid #CBD5E1;
+        padding: 14px;
+        color: #1E293B;
+    }
+    div[data-baseweb="textarea"] textarea:focus {
+        border-color: #4F46E5;
+        box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
+    }
+
+    /* Info Callouts and Containers */
+    .stAlert {
+        border-radius: 12px;
+        border: 1px solid #E2E8F0;
+        background-color: #FFFFFF;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -80,7 +120,7 @@ st.markdown('<p class="sub-title">Powered by Google Gemini AI, ElevenLabs, Solan
 with st.container():
     st.info("💡 **How it works:** Want to give back, donate items, or share your time, but aren't sure where to start? Tell us what you have or want to do, and our AI matchmaker will build a customized action plan for you!")
 
-# User Input Form inside an aesthetic container
+# User Input Form
 with st.form("match_form"):
     st.markdown("### 📝 Tell Us What You Want to Share")
     user_input = st.text_area(
@@ -126,7 +166,7 @@ if submit_button:
 if "match_result" in st.session_state:
     st.markdown("---")
     
-    # Action Plan Card Container
+    # Action Plan Section
     with st.container():
         st.markdown("### 📋 Your Personalized Generosity Action Plan")
         st.markdown(st.session_state["match_result"])
