@@ -4,4 +4,5 @@ python-dotenv
 elevenlabs
 qrcode
 snowflake-connector-python
+pyarrow<24.0.0
 pillow
