@@ -1,4 +1,7 @@
+streamlit
 google-genai
 python-dotenv
-streamlit
 elevenlabs
+qrcode
+snowflake-connector-python
+pillow
