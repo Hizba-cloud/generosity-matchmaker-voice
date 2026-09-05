@@ -158,6 +158,7 @@ if "match_result" in st.session_state:
                     f"Here is the plan: {st.session_state['match_result']}"
                 )
 
+                # Using standard default free-tier compatible voice ID (Rachel)
                 audio_stream = eleven_client.text_to_speech.convert(
                     text=tts_script,
                     voice_id="21m00Tcm4TlvDq8ikWAM",
@@ -170,8 +171,9 @@ if "match_result" in st.session_state:
                 st.success("Audio guide ready!")
 
             except Exception as e:
-                if "402" in str(e) or "paid_plan_required" in str(e):
-                    st.warning("⚠️ **ElevenLabs Free Tier Notice:** ElevenLabs free API accounts restrict the programmatic use of certain library voices. Please upgrade your ElevenLabs plan or use a compatible voice ID to enable audio playback.")
+                err_str = str(e)
+                if "402" in err_str or "paid_plan_required" in err_str or "voices" in err_str:
+                    st.warning("⚠️ **ElevenLabs Free Tier Notice:** Free API accounts restrict programmatic access to certain library voices. Please upgrade your plan or ensure you're using a baseline default voice ID (like Rachel: `21m00Tcm4TlvDq8ikWAM`).")
                 else:
                     st.error(f"ElevenLabs Error: {e}")
 
